@@ -1,8 +1,10 @@
 package com.wildcodeschool.MyBlog.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wildcodeschool.MyBlog.model.Article;
@@ -98,6 +101,22 @@ public class ArticleController {
         articleRepository.delete(article);
         return ResponseEntity.noContent().build();
     }
+    //
+    @GetMapping("/search-by-content")
+    public List<Article> getArticlesByContent(@RequestParam String content) {
+        return articleRepository.findByContentContaining(content);
+    }
 
+    //
+    @GetMapping("/created-after")
+    public List<Article> getArticlesCreatedAtAfter(@RequestParam LocalDate date) {
+        return articleRepository.findByCreatedAtAfter(date);
+    }
     
+    //
+
+    @GetMapping("/last-five")
+    public List<Article> getFiveLastArticles() {
+        return articleRepository.findTop5ByOrderByCreatedAtDesc();
+    }
 }
